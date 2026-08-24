@@ -1,4 +1,4 @@
-
+using Scalar.AspNetCore;
 using FilmRentalNET25.Data;
 using FilmRentalNET25.Middleware;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +28,7 @@ namespace FilmRentalNET25
             if (app.Environment.IsDevelopment())
             {
                 app.MapOpenApi();
+                app.MapScalarApiReference();
             }
 
             app.UseHttpsRedirection();

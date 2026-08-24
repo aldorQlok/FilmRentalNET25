@@ -17,6 +17,12 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Scalar.AspNetCore" Version="2.17.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="DTO\UsersMovies\" />
+    <Folder Include="DTO\Users\" />
   </ItemGroup>
 
 </Project>
