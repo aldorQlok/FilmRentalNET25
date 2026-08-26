@@ -2,6 +2,10 @@ using Scalar.AspNetCore;
 using FilmRentalNET25.Data;
 using FilmRentalNET25.Middleware;
 using Microsoft.EntityFrameworkCore;
+using FilmRentalNET25.Repository.IRepository;
+using FilmRentalNET25.Repository;
+using FilmRentalNET25.Service.IService;
+using FilmRentalNET25.Service;
 
 namespace FilmRentalNET25
 {
@@ -22,7 +26,12 @@ namespace FilmRentalNET25
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
 
+            builder.Services.AddScoped<IMovieRepository, MovieRepository>();
+            builder.Services.AddScoped<IMovieService, MovieService>();
+
             var app = builder.Build();
+
+            app.UseMiddleware<GlobalExceptionMiddleware>();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

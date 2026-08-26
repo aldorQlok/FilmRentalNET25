@@ -1,4 +1,5 @@
 ﻿using FilmRentalNET25.DTO.Movies;
+using FilmRentalNET25.Service.IService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,40 +9,72 @@ namespace FilmRentalNET25.Controllers
     [ApiController]
     public class MoviesController : ControllerBase
     {
+        private readonly IMovieService movieService;
+        public MoviesController(IMovieService _movieService)
+        {
+            movieService = _movieService;
+        }
+
 
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<ActionResult<List<MovieDTO>>> GetAll()
         {
-            return Ok();
+            var movies = await movieService.GetAllMoviesAsync();
+
+            return Ok(movies);
         }
 
         [HttpGet]
-        [Route("{id:int}")]
-        public IActionResult GetById(int id)
+        [Route("{movieId:int}")]
+        public async Task<ActionResult<MovieDTO>> GetById(int movieId)
         {
-            return Ok();
+            var movie = await movieService.GetMovieByIdAsync(movieId);
+
+            if (movie == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(movie);
         }
 
 
         [HttpPost]
-        public IActionResult Create(CreateMovieDTO newMovie)
+        public async Task<ActionResult<MovieDTO>> Create(CreateMovieDTO newMovie)
         {
-            return Ok();
+            var createdMovie = await movieService.CreateMovieAsync(newMovie);
+
+
+            return CreatedAtAction(nameof(GetById), new {movieId = createdMovie.MovieId}, createdMovie);
         }
 
         [HttpPut]
-        [Route("{id:int}")]
-        public IActionResult Update(int id)
+        [Route("{movieId:int}")]
+        public async Task<IActionResult> Update(int movieId, UpdateMovieDTO movie)
         {
-            return Ok();
+            var updated = await movieService.UpdateMovieAsync(movieId, movie);
+
+            if (!updated)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
         }
 
 
         [HttpDelete]
-        [Route("{id:int}")]
-        public IActionResult Delete(int id)
+        [Route("{movieId:int}")]
+        public async Task<IActionResult> Delete(int movieId)
         {
-            return Ok();
+            var deleted = await movieService.DeleteMovieAsync(movieId);
+
+            if (!deleted)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
         }
 
     }
