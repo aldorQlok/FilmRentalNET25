@@ -19,22 +19,6 @@ namespace FilmRentalNET25.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<User>()
-                .HasData(
-                    new User { UserId = 1, Name = "Aldor", Email = "Aldor@gmail.com" },
-                    new User { UserId = 2, Name = "Johan", Email = "Johan@gmail.com" }
-                );
-
-            // property index med unik index.
-            modelBuilder.Entity<User>()
-                .HasIndex(u => u.Email)
-                .IsUnique();
-
-            // Composite Index med unik index.
-            modelBuilder.Entity<Movie>()
-                .HasIndex(m => new { m.Title, m.ReleaseYear })
-                .IsUnique();
-
         }
 
     }
