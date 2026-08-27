@@ -1,5 +1,6 @@
 ﻿using FilmRentalNET25.DTO.Movies;
 using FilmRentalNET25.Service.IService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,7 +16,7 @@ namespace FilmRentalNET25.Controllers
             movieService = _movieService;
         }
 
-
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<List<MovieDTO>>> GetAll()
         {
@@ -24,6 +25,7 @@ namespace FilmRentalNET25.Controllers
             return Ok(movies);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         [Route("{movieId:int}")]
         public async Task<ActionResult<MovieDTO>> GetById(int movieId)
@@ -61,7 +63,6 @@ namespace FilmRentalNET25.Controllers
 
             return NoContent();
         }
-
 
         [HttpDelete]
         [Route("{movieId:int}")]

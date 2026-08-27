@@ -6,12 +6,14 @@ using FilmRentalNET25.Repository.IRepository;
 using FilmRentalNET25.Repository;
 using FilmRentalNET25.Service.IService;
 using FilmRentalNET25.Service;
+using FilmRentalNET25.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace FilmRentalNET25
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +24,12 @@ namespace FilmRentalNET25
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
 
+            builder.Services.AddIdentityApiEndpoints<User>(options =>
+            {
+                options.User.RequireUniqueEmail = true;
+            }).AddRoles<IdentityRole<int>>()
+            .AddEntityFrameworkStores<FilmRentalNET25DBContext>();
+
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
@@ -29,9 +37,13 @@ namespace FilmRentalNET25
             builder.Services.AddScoped<IMovieRepository, MovieRepository>();
             builder.Services.AddScoped<IMovieService, MovieService>();
 
+            builder.Services.AddAuthorization();
+
             var app = builder.Build();
 
-            app.UseMiddleware<GlobalExceptionMiddleware>();
+            //await app.SeedAdminUser();
+
+            //app.UseMiddleware<GlobalExceptionMiddleware>();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -42,11 +54,14 @@ namespace FilmRentalNET25
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
 
             // Injicera middleware i Request Pipeline
             app.UseMiddleware<SimpleMiddleware>();
+
+            app.MapIdentityApi<User>();
 
             app.MapControllers();
 
