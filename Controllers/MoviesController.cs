@@ -16,7 +16,7 @@ namespace FilmRentalNET25.Controllers
             movieService = _movieService;
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpGet]
         public async Task<ActionResult<List<MovieDTO>>> GetAll()
         {
@@ -25,7 +25,7 @@ namespace FilmRentalNET25.Controllers
             return Ok(movies);
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpGet]
         [Route("{movieId:int}")]
         public async Task<ActionResult<MovieDTO>> GetById(int movieId)

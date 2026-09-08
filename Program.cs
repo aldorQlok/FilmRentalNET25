@@ -39,7 +39,19 @@ namespace FilmRentalNET25
 
             builder.Services.AddAuthorization();
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("Frontend", policy =>
+                {
+                    policy.WithOrigins(builder.Configuration["Frontend_Domain"]) // lägg domänen i User Secrets
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+                });
+            });
+
             var app = builder.Build();
+
+            app.UseCors("Frontend");
 
             //await app.SeedAdminUser();
 
@@ -51,6 +63,7 @@ namespace FilmRentalNET25
                 app.MapOpenApi();
                 app.MapScalarApiReference();
             }
+
 
             app.UseHttpsRedirection();
 
