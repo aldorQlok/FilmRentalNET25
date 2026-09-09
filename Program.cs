@@ -45,7 +45,8 @@ namespace FilmRentalNET25
                 {
                     policy.WithOrigins(builder.Configuration["Frontend_Domain"]) // lägg domänen i User Secrets
                     .AllowAnyHeader()
-                    .AllowAnyMethod();
+                    .AllowAnyMethod()
+                    .AllowCredentials();
                 });
             });
 

@@ -16,7 +16,7 @@ namespace FilmRentalNET25.Controllers
             movieService = _movieService;
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<List<MovieDTO>>> GetAll()
         {
