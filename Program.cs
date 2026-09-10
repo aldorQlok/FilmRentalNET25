@@ -30,6 +30,15 @@ namespace FilmRentalNET25
             }).AddRoles<IdentityRole<int>>()
             .AddEntityFrameworkStores<FilmRentalNET25DBContext>();
 
+            if (builder.Environment.IsDevelopment())
+            {
+                builder.Services.ConfigureApplicationCookie(option =>
+                {
+                    option.Cookie.SameSite = SameSiteMode.None;
+                    option.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                });
+            }
+
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
@@ -75,7 +84,9 @@ namespace FilmRentalNET25
             // Injicera middleware i Request Pipeline
             app.UseMiddleware<SimpleMiddleware>();
 
-            app.MapIdentityApi<User>();
+            var api = app.MapGroup("/api");
+
+            api.MapIdentityApi<User>();
 
             app.MapControllers();
 
