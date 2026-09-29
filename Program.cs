@@ -46,6 +46,17 @@ namespace FilmRentalNET25
             builder.Services.AddScoped<IMovieRepository, MovieRepository>();
             builder.Services.AddScoped<IMovieService, MovieService>();
 
+            //builder.Services.AddMemoryCache();
+
+            builder.Services.AddStackExchangeRedisCache(options =>
+            {
+                var endpoint = builder.Configuration["Redis:Endpoint"];
+                var password = builder.Configuration["Redis:Password"];
+
+                options.Configuration = $"{endpoint},password={password},ssl=True,abortConnect=false";
+                options.InstanceName = "FilmRentalNET25:";
+            });
+
             builder.Services.AddAuthorization();
 
             builder.Services.AddCors(options =>
